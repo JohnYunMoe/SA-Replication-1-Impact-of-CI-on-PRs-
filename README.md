@@ -1,101 +1,96 @@
 <p style="border:1px; border-style:solid; border-color:black; padding: 1em;">
 CS-UH 3260 Software Analytics<br/>
 Replication Study<br/>
-John Yun Moe, NYUAD
+John Yun Moe & Zavier Shaikh, NYUAD
 </p>
 
-# Replication Repository README Template -- CS-UH-3260 Software Analytics
+# Replication Study: Impact of CI on Pull Request Delivery Time
 
+## 1. Project Title and Overview
 
-## Overview
-
-This repo provides a template and and guidelines for creating a README file for your replication study repository. The README serves as the primary documentation for your repository and helps evaluators understand your work, navigate your repository structure, and reproduce your replication. You can create a repo based on this template and modify the README and content as needed.
-
-
-## README Structure Template
-
-Your repository README should include the following sections:
-
-### 1. Project Title and Overview
-
-- **Paper Title**: [Full title of the replicated paper]
-- **Authors**: [Original paper authors]
-- **Replication Team**: [Your team members' names]
+- **Paper Title**: Studying the Impact of Adopting Continuous Integration on the Delivery Time of Pull Requests
+- **Authors**: João Helis Bernardo, Daniel Alencar da Costa, Uirá Kulesza
+- **Conference**: MSR '18: 15th International Conference on Mining Software Repositories (May 2018)
+- **Replication Team**: John Yun Moe, Zavier Shaikh
 - **Course**: CS-UH 3260 Software Analytics, NYUAD
-- **Brief Description**: 
-  - 2-3 sentences summarizing what the original paper is about
-  - 2-3 sentences summarizing what this replication study does
 
-### 2. Repository Structure
+### Brief Description
 
-Document your repository structure clearly. Organize your repository using the following standard structure:
+**Original Paper**: The paper empirically investigates how adopting Continuous Integration (CI) impacts the delivery time of pull requests in GitHub projects. Through analysis of 162,653 pull requests across 87 projects in 5 programming languages, the authors examine whether CI actually speeds up PR delivery, what factors influence delivery time, and how development activity changes after CI adoption.
 
+**Replication Study**: This replication study aims to reproduce the key findings of the original paper by analyzing the relationship between CI adoption and pull request delivery time in GitHub projects. We examine the merge time, delivery phases, and factors that influence the time-to-delivery of merged PRs before and after CI adoption.
+
+## 2. Repository Structure
 ```
-README                    # Documentation for your repository
-datasets/                 # Subset of data you used (if any). If you used the whole dataset, include instructions on how to download it
-replication_scripts/      # Scripts used in your replication:
-                          #   - If you used scripts as-is: document which scripts you ran
-                          #   - If you modified scripts: include the modified scripts
-                          #   - If you created new scripts: include all new scripts
-outputs/                  # Your generated results only
-logs/                     # Console output, errors, screenshots
-notes/                    # Optional if you have any notes you took during reproduction (E.g., where you noted discrepencies etc)
+README.md                 # This documentation file
+datasets/                 # [TO BE ADDED] Dataset used for replication
+replication_scripts/      # [TO BE ADDED] Scripts for data collection and analysis
+outputs/                  # [TO BE ADDED] Generated results (figures, tables, models)
+logs/                     # [TO BE ADDED] Console outputs, errors, execution logs
+notes/                    # [TO BE ADDED] Notes on discrepancies and observations
 ```
 
-**For each folder and file, provide a brief description of what it contains.**
+### Folder Descriptions
 
-### 3. Setup Instructions
+- **datasets/**: Will contain the pull request and release data from GitHub projects (to be collected)
+- **replication_scripts/**: Will contain scripts for:
+  - Data collection from GitHub API
+  - PR-to-release linking
+  - Statistical analysis (Mann-Whitney-Wilcoxon tests, regression modeling)
+  - Visualization generation
+- **outputs/**: Will contain replicated results including:
+  - Statistical test results
+  - Regression model outputs (R² values, variable importance)
+  - Figures comparing before/after CI adoption
+- **logs/**: Will document script execution, API calls, and any errors encountered
+- **notes/**: Will track differences between our results and the original paper
 
-- **Prerequisites**: Required software, tools, and versions
-  - OS requirements
-  - Programming language versions (Python, R, etc.)
-  - Required packages/libraries and versions
-  - Any other dependencies
-- **Installation Steps**: Step-by-step instructions to set up the environment
-  - How to install dependencies
-  - How to configure paths or settings
-  - Any environment variables needed
+## 3. Setup Instructions
 
-### 4. GenAI Usage
+### Prerequisites
 
-**GenAI Usage**: Briefly document any use of generative AI tools (e.g., ChatGPT, GitHub Copilot, Cursor) during the replication process. Include:
+**[TO BE ADDED]**
 
-  - Which tools were used
-  - How they were used (e.g., understanding scripts, exploring datasets, understanding data fields, debugging)
-  - Brief description of the assistance provided
+- Operating System: [TBD]
+- Programming Language: [TBD - likely Python or R based on paper's statistical analysis]
+- Required packages/libraries: [TBD]
+- GitHub API access token (for data collection)
 
+### Installation Steps
 
-## Grading Criteria for README
+**[TO BE ADDED]**
 
-Your README will be evaluated based on the following aspects (Total: 40 points):
+Instructions will be provided once the replication environment is established.
 
-### 1. Completeness (10 points)
-- [ ] All required sections are present
-- [ ] Each section contains sufficient detail
-- [ ] Repository structure is fully documented
-- [ ] All files and folders are explained
-- [ ] GenAI usage is documented (if any AI tools were used)
+## 4. Reproduction Steps
 
-### 2. Clarity and Organization (5 points)
-- [ ] Information is well-organized and easy to follow
-- [ ] Instructions are clear and unambiguous
-- [ ] Professional writing and formatting
-- [ ] Proper use of markdown formatting (headers, code blocks, lists)
+**[TO BE ADDED]**
 
-### 3. Setup and Reproducibility (10 points)
-- [ ] Setup instructions are complete and accurate, i.e., we were able to rerun the scripts following your instructions and obtain the results you reported
+Detailed steps to reproduce the analysis will be documented here, including:
 
+1. Data collection process
+2. PR-to-release linking methodology
+3. Statistical analysis steps
+4. Figure generation
 
-## Best Practices
+## 5. Results
 
-1. **Be Specific**: Include exact versions, paths, and commands rather than vague descriptions
-2. **Keep It Updated**: Ensure the README reflects the current state of your repository
-3. **Test Your Instructions**: Have someone else (or yourself in a fresh environment) follow the setup instructions
-4. **Document AI Usage**: If you used any GenAI tools, be transparent about how they were used (e.g., understanding scripts, exploring datasets, understanding data fields)
+**[TO BE ADDED]**
 
+Comparison of our replicated results with the original paper's findings will be documented here.
 
-## Acknowledgement
+## 6. GenAI Usage
 
-This guideline was developed with the assistance of [Cursor](https://www.cursor.com/), an AI-powered code editor. This tool was used to:
+**Tools Used**: Claude (Anthropic)
 
-- Draft and refine this documentation iteratively
+**Purpose**: 
+- Structuring and fine-editing this README file to ensure clarity and completeness
+- Formatting markdown elements for professional documentation
+
+## 7. References
+
+Bernardo, J. H., da Costa, D. A., & Kulesza, U. (2018). Studying the Impact of Adopting Continuous Integration on the Delivery Time of Pull Requests. In *Proceedings of the 15th International Conference on Mining Software Repositories* (MSR '18), 131-141. https://doi.org/10.1145/3196398.3196421
+
+---
+
+*Last Updated*: 

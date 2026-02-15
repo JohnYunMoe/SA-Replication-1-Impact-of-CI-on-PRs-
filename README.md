@@ -1,7 +1,7 @@
 <p style="border:1px; border-style:solid; border-color:black; padding: 1em;">
 CS-UH 3260 Software Analytics<br/>
-Replication Study Guidelines<br/>
-Dr. Sarah Nadi, NYUAD
+Replication Study<br/>
+John Yun Moe, NYUAD
 </p>
 
 # Replication Repository README Template -- CS-UH-3260 Software Analytics

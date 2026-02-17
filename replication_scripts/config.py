@@ -7,3 +7,4 @@ PROJECTS = [
 ]
 
 OUTPUT_CSV = "datasets/Collected Data/pull_requests.csv"
+RELEASES_OUTPUT_CSV = "datasets/Collected Data/releases.csv"

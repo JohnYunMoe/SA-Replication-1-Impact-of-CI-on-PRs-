@@ -2,9 +2,7 @@ import pandas as pd
 from scipy.stats import mannwhitneyu
 from cliffs_delta import cliffs_delta
 
-# Horribly unoptimised code, and definitely doing things the inefficient, and likely even wrong, way
-
-csv = pd.read_csv("datasets/Provided Data/pull_requests_meta_data.csv")
+csv = pd.read_csv("datasets/Provided Data/pull_requests_meta_data.csv", )
 
 project_names = csv["project"].unique()
 
@@ -15,6 +13,14 @@ mean_times = csv.groupby(["project", "practice"]).agg(
     delivery_time=("delivery_time", "mean"),
 	lifetime=("lifetime", "mean"),
 ).reset_index()
+
+# print(mean_times.at[('AnalyticalGraphicsInc/cesium', 'CI'), "merge_time"])
+# print(csv.head(), mean_times.head())
+# print(mean_times.loc[mean_times["practice"] == "CI", :])
+# print(mean_times.loc[mean_times["project"] == "AnalyticalGraphicsInc/cesium", :])
+# mean_times.reset_index()
+# print(mean_times.head())
+# quit()
 
 # In the form:
 #                         project practice  merge_time  delivery_time
@@ -30,10 +36,11 @@ mean_times = csv.groupby(["project", "practice"]).agg(
 
 projects_passed_delivery_p = []
 for project in project_names:
-	if (mannwhitneyu(
-		csv.loc[(csv["project"] == project) & (csv["practice"] == "CI"), "delivery_time"],
-		csv.loc[(csv["project"] == project) & (csv["practice"] == "NO-CI"), "delivery_time"]
-	)[1] < 0.05):
+
+	proj_post_ci_dt = csv.loc[(csv["project"] == project) & (csv["practice"] == "CI"), "delivery_time"]
+	proj_pre_ci_dt = csv.loc[(csv["project"] == project) & (csv["practice"] == "NO-CI"), "delivery_time"]
+
+	if (mannwhitneyu(proj_post_ci_dt, proj_pre_ci_dt)[1] < 0.05): # and cliffs_delta(proj_post_ci_dt, proj_pre_ci_dt)[1] == "negligible"
 		projects_passed_delivery_p.append(project)
 
 n = 0
@@ -43,7 +50,7 @@ for project in projects_passed_delivery_p:
 		< x.loc[x["practice"] == "NO-CI", "delivery_time"].values[0]):
 		n += 1
 
-print(f"1. {n/len(projects_passed_delivery_p) * 100:.1f}% ({n}/{len(projects_passed_delivery_p)}) of the projects deliver merged PRs more quickly after the adoption of CI.")
+print(f"1. {n/len(projects_passed_delivery_p):.1%} ({n}/{len(projects_passed_delivery_p)}) of the projects deliver merged PRs more quickly after the adoption of CI.")
 
 # mean_times["merge_time_pre_ci"] = mean_times[mean_times["practice"] == "NO-CI"]["merge_time"]
 # mean_times["merge_time_post_ci"] = mean_times[mean_times["practice"] == "CI"]["merge_time"]
@@ -74,7 +81,7 @@ for project in projects_passed_merge_p:
 		> x.loc[x["practice"] == "NO-CI", "merge_time"].values[0]):
 		n += 1
 
-print(f"2. In {n/len(projects_passed_merge_p) * 100:.1f}% ({n}/{len(projects_passed_merge_p)}) of the projects, PRs are merged faster before adopting CI.")
+print(f"2. In {n/len(projects_passed_merge_p):.1%} ({n}/{len(projects_passed_merge_p)}) of the projects, PRs are merged faster before adopting CI.")
 
 
 ## 3
@@ -86,4 +93,7 @@ for project in project_names:
 		> x.loc[x["practice"] == "NO-CI", "lifetime"].values[0]):
 		n += 1
 
-print(f"3. In {n/len(project_names) * 100:.1f}% ({n}/{len(project_names)}) of the projects, PRs have a longer lifetime after adopting CI.")
+print(f"3. In {n/len(project_names):.1%} ({n}/{len(project_names)}) of the projects, PRs have a longer lifetime after adopting CI.")
+
+
+# Yeaa.... that was probably some horribly inefficient code

@@ -3,4 +3,4 @@ python-dotenv>=1.0.0
 
 cliffs-delta
 scipy
-pandas[performance, computation]
+pandas[plot]

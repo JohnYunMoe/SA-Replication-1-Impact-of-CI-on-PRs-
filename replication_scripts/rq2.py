@@ -3,31 +3,27 @@ from scipy.stats import mannwhitneyu, pearsonr
 from cliffs_delta import cliffs_delta
 import matplotlib.pyplot as plt
 
-csv = pd.read_csv("datasets/Provided Data/releases_meta_data.csv", parse_dates=["startedAt", "publishedAt"])
+releases_csv = pd.read_csv("datasets/Provided Data/releases_meta_data.csv", parse_dates=["startedAt", "publishedAt"])
 
-project_names = csv["project"].unique()
+project_names = releases_csv["project"].unique()
 
-mean_data = csv.groupby(["project", "practice"]).agg(
+mean_data = releases_csv.groupby(["project", "practice"]).agg(
 	created_pull_requests=("created_pull_requests", "mean"),
 	merged_pull_requests=("merged_pull_requests", "mean"),
 	released_pull_requests=("released_pull_requests", "mean"),
-	# sum_submitted_pr_churn=("sum_submitted_pr_churn", "mean"),
-)# .reset_index()
+)
 
-median_data = csv.groupby(["practice"]).agg(
+median_data = releases_csv.groupby(["practice"]).agg(
 	created_pull_requests=("created_pull_requests", "median"),
 	merged_pull_requests=("merged_pull_requests", "median"),
 	released_pull_requests=("released_pull_requests", "median"),
-	# sum_submitted_pr_churn=("sum_submitted_pr_churn", "median"),
-)# .reset_index()
+)
 
 # Idk why the authors changed the terminology between the code and paper, but
 #   -   created_pull_requests -> Submitted PRs
 #   -    merged_pull_requests -> Merged PRs
 #   -  released_pull_requests -> Delivered PRs
 #   - (sum_submitted_pr_churn -> Amount of code changes in PRs)
-
-# print(csv, mean_data, median_data, sep="\n\n") # TEMP
 
 
 ## 1 - Increase in PR submissions after CI (by number of projects)
@@ -41,6 +37,17 @@ print(f"1. {n/len(project_names):.1%} ({n}/{len(project_names)}) of the projects
 
 
 ## 2 - Increase in PRs delivered after CI (overall)
+
+pre_ci_released_prs_list = []
+post_ci_released_prs_list = []
+
+n = 0
+for project in project_names:
+	pre_ci_released_prs_list.append(mean_data.at[(project, 'CI'), "released_pull_requests"])
+	post_ci_released_prs_list.append(mean_data.at[(project, 'NO-CI'), "released_pull_requests"])
+
+print(f"2. After adopting CI projects deliver {pd.Series(pre_ci_released_prs_list).agg("median")/pd.Series(post_ci_released_prs_list).agg("median"):.2f} times more PRs per release than before CI.")
+
 
 # for i in ["created_pull_requests", "merged_pull_requests", "released_pull_requests"]:
 #     print(csv[["practice", i]].groupby("practice").describe())
@@ -70,16 +77,10 @@ print(f"1. {n/len(project_names):.1%} ({n}/{len(project_names)}) of the projects
 
 ## 3 - (No) Difference in release frequency after CI
 
-
-# 1. CI & NO-CI
-# 2. Find number of releases for each project for each year (Jan-Dec?)
-# 3. Box plot of num releases
-
-# publishedAt
 pre_ci_releases_per_year_list = []
 post_ci_releases_per_year_list = []
 for project in project_names:
-	release_counts = csv.loc[(csv["project"] == project), :].groupby(["practice", csv["publishedAt"].dt.year]).count()["title"]
+	release_counts = releases_csv.loc[(releases_csv["project"] == project), :].groupby(["practice", releases_csv["publishedAt"].dt.year]).count()["title"]
 	# In the form (Series):
 
 	# practice  publishedAt
@@ -94,43 +95,27 @@ for project in project_names:
 	pre_ci_releases_per_year_list.extend(release_counts["NO-CI"])
 	post_ci_releases_per_year_list.extend(release_counts["CI"])
 
-plt.boxplot(post_ci_releases_per_year_list)
-plt.savefig("releases_per_year_(ci)_boxplot.png", bbox_inches='tight')
-plt.show()
+# plt.boxplot(post_ci_releases_per_year_list)
+# plt.savefig("releases_per_year_(ci)_boxplot.png", bbox_inches='tight')
+# plt.show()
 
-print(pd.Series(post_ci_releases_per_year_list).describe())
-
-# pre_ci
-# count    288.000000
-# mean      10.083333
-# std       14.438865
-# min        1.000000
-# 25%        3.000000
-# 50%        6.000000
-# 75%       11.000000
-# max      140.000000
-# dtype: float64
-
-# post_ci
-# count    287.000000
-# mean      15.804878
-# std       34.775256
-# min        1.000000
-# 25%        3.000000
-# 50%        7.000000
-# 75%       16.000000
-# max      434.000000
-# dtype: float64
-
-# CI    Name  Year    # Releases
-# CI    P1    2026    2
-# CI    P1    2025    10
-# CI    P2    2026    2
-# CI    P2    2025    10
-
-# We do not observe a significant difference of release frequency after adopting CI
+print(f"3. Median releases before and after adopting CI: {pd.Series(pre_ci_releases_per_year_list).agg("median")}, {pd.Series(post_ci_releases_per_year_list).agg("median")}")
 
 
 ## 4
 
-# We find that 75.9% (66/87) of the studied projects tend to increase the number of PR contributors per release after adopting CI.
+prs_csv = pd.read_csv("datasets/Provided Data/pull_requests_meta_data.csv")
+
+median_prs_csv = prs_csv.groupby(["project", "practice"]).agg(
+    contributor_integration_median=("contributor_integration", "median"),
+    contributor_experience_median=("contributor_experience", "median"),
+)
+
+n = 0
+for project in project_names:
+	if (median_prs_csv.at[(project, 'CI'), "contributor_integration_median"]
+		> median_prs_csv.at[(project, 'NO-CI'), "contributor_integration_median"]):
+		n += 1
+
+
+print(f"4. In {n/len(project_names):.1%} ({n}/{len(project_names)}) of the projects tend to increase the number of PR contributors per release after adopting CI.")
